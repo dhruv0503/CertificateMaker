@@ -1,0 +1,71 @@
+.main{
+    width: 100%;
+    height: 80vh;
+    position: relative;
+    padding: 10px;
+}
+.img1{
+    width: 35%;
+    top: 15%;
+    right: 2%;
+    position: absolute;
+}
+
+/* heading */
+.imgLogo{
+    width: 50px;
+    height: 50px;
+}
+.insideNav{
+    float: left;
+    display: flex;
+    margin: 10px;
+    justify-content: baseline;
+    width: 100%;
+}
+
+/* Main body */
+.mainBody{
+    max-width: 700px;
+}
+@media only screen and (max-width:1200px){
+    .mainBody{
+        max-width: 500px;
+    }
+}
+@media only screen and (max-width:600px){
+    .mainBody{
+        width: 100%;
+    }
+    .img1{
+        position: static;
+        width: 50%;
+    }
+    .main{
+        width: 100%;
+        height: 70vh;
+        position: relative;
+        padding: 10px;
+    }
+}
+
+.content{
+    float: left;
+    padding: 20px;
+    
+}
+.content h1{
+    color: blue;
+    font-weight: bold;
+    font-size: xx-large;
+    text-align: left;
+}
+.content p{
+    text-align: left;
+    padding: 20px;
+    font-size: large;
+    font-weight: bold;
+}
+.content p:hover{
+    text-shadow: 0 0 15px #000000;
+}
