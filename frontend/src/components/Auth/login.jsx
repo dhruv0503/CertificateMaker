@@ -4,13 +4,11 @@ import axios from "axios";
 import "./login.css"; // Import custom CSS
 
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 
 const Login = () => {
   //const { handleLogin } = useOutletContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("Student");
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
@@ -22,17 +20,19 @@ const Login = () => {
       const response = await axios.post("http://localhost:5000/api/login", {
         email,
         password,
-        role,
       });
+      localStorage.setItem("token", response.data.token);
+      const userData = response.data.userData;
 
       if (response.status === 200) {
         setSuccess(true);
         setError(null);
         // Redirect based on role
+        const role = response.data.role;
         if (role === "Student") {
-          navigate("/student", { state: { email } });
+          navigate("/student", { state: { userData } });
         } else if (role === "Admin") {
-          navigate("/admin", { state: { email } });
+          navigate("/admin", { state: { userData } });
         }
       } else {
         setError("Login failed. Please check your credentials.");
@@ -78,17 +78,6 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-            </Form.Group>
-            <Form.Group controlId="formBasicRole">
-              <Form.Label>Role</Form.Label>
-              <Form.Control
-                as="select"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-              >
-                <option>Admin</option>
-                <option>Student</option>
-              </Form.Control>
             </Form.Group>
             <Button variant="primary" type="submit" className="w-100">
               Login

@@ -1,12 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Banner from "./Banner";
-import data from "../../assets/data";
 import CertificateList from "./CertificateList";
+import axios from "axios";
+import { useLocation } from "react-router-dom";
+import Card from "./Card";
 
 const Student = () => {
-  const [certificates, setCertificates] = useState([data]);
+  const [certificates, setCertificates] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
+  const location = useLocation();
+  
+  const userData = location.state?.userData || {};
+  
+
 
   // ----------- Input Filter -----------
   const [query, setQuery] = useState("");
@@ -15,12 +22,32 @@ const Student = () => {
     setCurrentPage(1);
   };
 
+  useEffect(() => {
+    const apiCall = async () => {
+      const response = await axios.get(
+        "http://localhost:5000/api/certificates",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      const certiRef = response.data;
+      setCertificates(certiRef.filter((item) => {
+        return item.user === userData._id;
+      }))
+    };
+
+    apiCall();
+  }, []);
+
   //------------filter by job title-----
   const filteredItems = certificates.filter(
     (certificate) =>
-      certificate.username?.toLowerCase()?.indexOf(query.toLowerCase()) !== -1 ||
-      certificate.department?.toLowerCase()?.indexOf(query.toLowerCase()) !== -1 ||
-      certificate.issueDate?.toLowerCase()?.indexOf(query.toLowerCase()) !== -1
+      certificate.name?.toLowerCase()?.indexOf(query.toLowerCase()) !== -1 ||
+      certificate.department?.toLowerCase()?.indexOf(query.toLowerCase()) !==
+        -1 ||
+      certificate.id?.toLowerCase()?.indexOf(query.toLowerCase()) !== -1
   );
   // console.log(filteredItems);
 
@@ -30,10 +57,9 @@ const Student = () => {
     const endIndex = startIndex + itemsPerPage;
     return { startIndex, endIndex };
   };
- 
+
   const { startIndex, endIndex } = calculatePageRange();
   const paginatedItems = filteredItems.slice(startIndex, endIndex);
-
 
   // Function to handle next page
   const nextPage = () => {
@@ -56,13 +82,24 @@ const Student = () => {
       </div>
 
       {/* Certificate List */}
-      <CertificateList certificates={paginatedItems} />
+      {/* <CertificateList certificates={paginatedItems} /> */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 m-3">
+      {certificates.map((item) => (
+        <Card
+          key={item._id}
+          id = {item._id}
+          username={userData.name}
+          departmentName={item.department}
+          issueDate={item.date}
+        />
+      ))}
+    </div>
       {/* Pagination Controls */}
       <div className="flex justify-center my-4">
         <button
           onClick={prevPage}
           disabled={currentPage === 1}
-           className=" px-4 py-2 bg-blue-500 text-white rounded mx-2"
+          className=" px-4 py-2 bg-blue-500 text-white rounded mx-2"
         >
           Previous
         </button>
