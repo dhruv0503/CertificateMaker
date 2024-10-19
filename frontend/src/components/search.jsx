@@ -146,3 +146,61 @@ const Search = () => {
 };
 
 export default Search;
+
+
+
+
+
+// import React, { useState } from "react";
+// import { Transition } from "@headlessui/react";
+// import { FaSearch } from "react-icons/fa";
+
+// const SearchBar = () => {
+//   const [open, setOpen] = useState(false);
+
+//   const handleOpen = () => setOpen(true);
+//   const handleClose = () => setOpen(false);
+
+//   return (
+//     <div className="relative">
+//       {!open && (
+//         <button
+//           onClick={handleOpen}
+//           className="p-2 rounded-full hover:bg-gray-200"
+//         >
+//           <FaSearch className="text-gray-500" />
+//         </button>
+//       )}
+
+//       <Transition
+//         show={open}
+//         enter="transition ease-out duration-300"
+//         enterFrom="transform -translate-y-full opacity-0"
+//         enterTo="transform translate-y-0 opacity-100"
+//         leave="transition ease-in duration-200"
+//         leaveFrom="transform translate-y-0 opacity-100"
+//         leaveTo="transform -translate-y-full opacity-0"
+//       >
+//         <div className="absolute top-0 left-0 w-full bg-white shadow-md p-4 rounded-lg flex items-center">
+//           <div className="flex items-center w-full">
+//             <FaSearch className="text-gray-500 mr-2" />
+//             <input
+//               type="text"
+//               placeholder="Search…"
+//               className="flex-grow p-2 border-none outline-none text-gray-700"
+//               autoFocus
+//             />
+//           </div>
+//           <button
+//             onClick={handleClose}
+//             className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-lg"
+//           >
+//             Search
+//           </button>
+//         </div>
+//       </Transition>
+//     </div>
+//   );
+// };
+
+//export default SearchBar;

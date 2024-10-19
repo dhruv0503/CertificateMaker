@@ -1,0 +1,49 @@
+body{
+    font-family: 'DM Sans', sans-serif;
+  }
+  
+  .active{
+    color: #3575E2;
+    font-weight: 500;
+  }
+  
+  a {
+    text-decoration: none;
+    /* color: rgb(97, 97, 97); */
+  }
+  
+  li {
+    list-style: none;
+  }
+  
+  .btns {
+    padding: 10px 20px;
+    margin-right: 6px;
+    background-color: rgb(21, 94, 99);
+    border:2px solid rgb(178, 170, 170);
+   
+    border-radius: 5px;
+    color: #f0e7e7;
+    cursor: pointer;
+  }
+  
+  /* jobs page */
+  
+  .card {
+    margin: 20px;
+    border: 2px solid #ededed;
+    padding: 20px;
+ 
+    width:30vw
+  }
+  
+  
+  .card-title {
+    margin-bottom: 1rem;
+  }
+  
+  .card-reviews {
+    margin-bottom: 1rem;
+    display: flex;
+  }
+  

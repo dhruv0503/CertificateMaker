@@ -34,13 +34,17 @@ import React from "react";
 import { Container, Navbar, Nav } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap"; // Use react-router-bootstrap for better integration with react-bootstrap
 import "./navbar.css"; // Import custom CSS for navbar
+import homeLogo from "./imageLogo.png"
 
 const AppNavbar = () => {
   return (
     <Navbar expand="lg" className="shadow-sm navbar-custom">
       <Container>
         <Navbar.Brand href="/" className="brand-custom">
-          Certificate Verification System
+        <div className="insideNav">
+        <img className="imgLogo" src={homeLogo} alt="" />
+        <h2>Certificate Verification System</h2>
+      </div>
         </Navbar.Brand>
         <Navbar.Toggle
           aria-controls="basic-navbar-nav"
@@ -51,14 +55,17 @@ const AppNavbar = () => {
             className="ml-auto mx-auto"
             style={{ width: "100%", justifyContent: "center" }}
           >
-            <LinkContainer to="/">
+            <LinkContainer to="/Certificate-Verification-System/">
               <Nav.Link>Home</Nav.Link>
             </LinkContainer>
-            <LinkContainer to="/login">
+            <LinkContainer to="/Certificate-Verification-System/login">
               <Nav.Link>Login</Nav.Link>
             </LinkContainer>
-            <LinkContainer to="/register">
-              <Nav.Link>Register</Nav.Link>
+            <LinkContainer to="/Certificate-Verification-System/student">
+              <Nav.Link>Dashboard</Nav.Link>
+            </LinkContainer>
+            <LinkContainer to="/Certificate-Verification-System/search">
+              <Nav.Link>Search</Nav.Link>
             </LinkContainer>
           </Nav>
         </Navbar.Collapse>

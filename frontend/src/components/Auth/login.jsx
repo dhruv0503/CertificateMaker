@@ -1,55 +1,66 @@
 import React, { useState } from "react";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import axios from "axios";
-import "./register.css"; // Import custom CSS
-import AppNavbar from "./navbar";
+import "./login.css"; // Import custom CSS
+
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-const Register = () => {
+const Login = () => {
+  //const { handleLogin } = useOutletContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("Student");
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const navigate = useNavigate();
 
-  const handleRegister = async (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:5000/api/register", {
+      const response = await axios.post("http://localhost:5000/api/login", {
         email,
         password,
         role,
       });
 
-      if (response.status === 201) {
+      if (response.status === 200) {
         setSuccess(true);
         setError(null);
+        // Redirect based on role
+        if (role === "Student") {
+          navigate("/student", { state: { email } });
+        } else if (role === "Admin") {
+          navigate("/admin", { state: { email } });
+        }
       } else {
-        setError("Registration failed. Please try again.");
+        setError("Login failed. Please check your credentials.");
         setSuccess(false);
       }
     } catch (error) {
-      console.error("Registration error:", error);
-      setError("Registration failed. Please try again.");
+      console.error("Login error:", error);
+      setError("Login failed. Please check your credentials.");
       setSuccess(false);
     }
   };
 
   return (
-    <>
-      <AppNavbar />
+    <div>
+     
       <Container
         className="mt-5 d-flex justify-content-center align-items-center"
         style={{ minHeight: "80vh" }}
       >
-        <div className="register-form border p-4 rounded">
+        <div className="login-form border p-4 rounded">
           <h2 className="text-center mb-4" style={{ color: "#364bc5" }}>
-            Register
+            Login
           </h2>
-          {success && <Alert variant="success">Registered successfully!</Alert>}
+          {success && (
+            <Alert variant="success">Login successful! Redirecting...</Alert>
+          )}
           {error && <Alert variant="danger">{error}</Alert>}
-          <Form onSubmit={handleRegister}>
+          <Form onSubmit={handleLogin}>
             <Form.Group controlId="formBasicEmail">
               <Form.Label>Email address</Form.Label>
               <Form.Control
@@ -75,22 +86,18 @@ const Register = () => {
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
               >
-                <option>Student</option>
                 <option>Admin</option>
+                <option>Student</option>
               </Form.Control>
             </Form.Group>
             <Button variant="primary" type="submit" className="w-100">
-              Register
+              Login
             </Button>
-
-            <div className="text-center mt-3">
-              <Link to="/login">Already have an account? Login here</Link>
-            </div>
           </Form>
         </div>
       </Container>
-    </>
+    </div>
   );
 };
 
-export default Register;
+export default Login;
