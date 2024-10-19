@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import Banner from "./Banner";
+import data from "../../assets/data";
 import CertificateList from "./CertificateList";
 
 const Student = () => {
-  const [certificates, setCertificates] = useState([]);
+  const [certificates, setCertificates] = useState([data]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
 
@@ -17,10 +18,9 @@ const Student = () => {
   //------------filter by job title-----
   const filteredItems = certificates.filter(
     (certificate) =>
-      certificate.username.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
-      certificate.department.toLowerCase().indexOf(query.toLowerCase()) !==
-        -1 ||
-      certificate.issueDate.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      certificate.username?.toLowerCase()?.indexOf(query.toLowerCase()) !== -1 ||
+      certificate.department?.toLowerCase()?.indexOf(query.toLowerCase()) !== -1 ||
+      certificate.issueDate?.toLowerCase()?.indexOf(query.toLowerCase()) !== -1
   );
   // console.log(filteredItems);
 
