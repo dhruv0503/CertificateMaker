@@ -15,6 +15,17 @@
     font-size: x-large;
   }
 
+  .cursive{
+    font-family: 'Pacifico', cursive;
+  }
+
+  .oxanium {
+    font-family: "Oxanium", sans-serif;
+    font-optical-sizing: auto;
+    font-weight:700;
+    font-style: normal;
+  }
+  
   
   .navbar-custom .nav-link {
     

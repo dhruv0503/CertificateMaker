@@ -1,4 +1,4 @@
-//One button left for both dashboard that is change password - 2 form fields both passwords. one is for old password one for new
+// One button left for both dashboard that is change password - 2 form fields both passwords. one is for old password one for new
 // const response = await axios.post('http://localhost:5000/api/changePassword', {oldPassword , newPassword}, {header auth bullshit neeche se copy mr le})
 
 //User Dashboard Done

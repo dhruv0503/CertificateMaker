@@ -2,12 +2,14 @@
 
 
   .login-form {
+    min-width:30vw;
+    min-height: 60vh;
     background-color: #ffffff; /* Light background color */
     color: #343a40; /* Dark text for readability */
     padding: 2rem; /* Ensure adequate padding around the form */
-    border-radius: 8px; /* Rounded corners for the form */
+    border-radius: 10px; /* Rounded corners for the form */
     border: 2px solid black; /* Border color matching the navbar background */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.5); /* Add shadow effect */
   }
   
   .login-form h2 {

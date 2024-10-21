@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { lazy, Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import {
   createBrowserRouter,
@@ -10,15 +10,15 @@ import App from "./App";
 import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-
 import LoginPage from "./pages/LoginPage";
- 
- 
-import Home from "./pages/LandingPage"; 
-import Studentdashboard from "./pages/Studentdashboard";
-import AdminDashboardPage from "./pages/AdminDashboard";
+ import Home from "./pages/LandingPage"; 
 import NotFound from "./components/NotFound";
 import Search from "./components/search";
+import Newsletter from "./components/Account/Account";
+
+// Lazy loading Student and Admin dashboard components
+const Studentdashboard = lazy(() => import("./pages/StudentDashboard"));
+const AdminDashboardPage = lazy(() => import("./pages/AdminDashboard"));
 
 // Lazy loader for suspense fallback
 const LazyLoader = (
@@ -46,9 +46,24 @@ const router = createBrowserRouter(
       }
     >
       <Route index element={<Home />} /> 
-      <Route path="login" element={<LoginPage />} />
-      <Route path="student" element={<Studentdashboard />} />
-      <Route path="admin" element={<AdminDashboardPage />} />
+     
+      <Route path="account" element={<Newsletter />} />
+      <Route 
+      path="student" 
+      element={
+        <Suspense fallback={LazyLoader}>
+          <Studentdashboard />
+        </Suspense>
+      } 
+    />
+    <Route 
+      path="admin" 
+      element={
+        <Suspense fallback={LazyLoader}>
+          <AdminDashboardPage />
+        </Suspense>
+      } 
+    />
       <Route path="search" element={<Search />} />
       <Route path="*" element={<NotFound />} />
     </Route>

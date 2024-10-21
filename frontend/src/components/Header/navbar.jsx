@@ -1,26 +1,41 @@
-// import React from "react";
-// import { Container, Navbar, Nav } from "react-bootstrap";
-// import "./navbar.css"; // Import custom CSS for navbar
+
+// import { useState, useEffect } from 'react';
+// import { Navbar, Container, Nav } from 'react-bootstrap';
+// import { LinkContainer } from 'react-router-bootstrap';
+// import "./navbar.css"; 
+// import homeLogo from "./imageLogo.png"
 
 // const AppNavbar = () => {
+//   const [isLoggedIn, setIsLoggedIn] = useState(false);
+ 
+
+//   useEffect(() => {
+//      //check user is authenticated
+//     const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
+//   setIsLoggedIn(loggedIn);
+
+//   }, []);
+
 //   return (
-//     <Navbar expand="lg" className="shadow-sm navbar-custom">
+//     <Navbar expand="lg" className="shadow-sm navbar-custom h-16">
 //       <Container>
 //         <Navbar.Brand href="/" className="brand-custom">
-//           Certificate Verification System
+//           <div className="insideNav d-flex align-items-center justify-content-center">
+//             <img className="imgLogo" src={homeLogo} alt="" />
+//             <h2 className="oxanium px-1 my-3">Certificate Verification System</h2>
+//           </div>
 //         </Navbar.Brand>
-//         <Navbar.Toggle
-//           aria-controls="basic-navbar-nav"
-//           className="navbar-toggler-custom"
-//         />
+//         <Navbar.Toggle aria-controls="basic-navbar-nav" className="navbar-toggler-custom" />
 //         <Navbar.Collapse id="basic-navbar-nav">
-//           <Nav
-//             className="ml-auto mx-auto"
-//             style={{ width: "100%", justifyContent: "center" }}
-//           >
-//             <Nav.Link href="/">Home</Nav.Link>
-//             <Nav.Link href="/login">Login</Nav.Link>
-//             <Nav.Link href="/register">Register</Nav.Link>
+//           <Nav className="ml-auto mx-auto" style={{ width: "100%", justifyContent: "center" }}>
+//             {isLoggedIn && (
+//               <>
+//                 {/* Account Link */}
+//                 <LinkContainer to="/Certificate-Verification-System/account">
+//                   <Nav.Link>Account</Nav.Link>
+//                 </LinkContainer>
+//               </>
+//             )}
 //           </Nav>
 //         </Navbar.Collapse>
 //       </Container>
@@ -30,20 +45,31 @@
 
 // export default AppNavbar;
 
-import React from "react";
+
+
+
+
+
+
+
+import React, { useState } from "react";
 import { Container, Navbar, Nav } from "react-bootstrap";
-import { LinkContainer } from "react-router-bootstrap"; // Use react-router-bootstrap for better integration with react-bootstrap
-import "./navbar.css"; // Import custom CSS for navbar
+import { LinkContainer } from "react-router-bootstrap"; 
+import "./navbar.css"; 
 import homeLogo from "./imageLogo.png"
 
 const AppNavbar = () => {
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState(null);
+
   return (
-    <Navbar expand="lg" className="shadow-sm navbar-custom">
+    <Navbar expand="lg" className="shadow-sm navbar-custom h-16">
       <Container>
         <Navbar.Brand href="/" className="brand-custom">
-        <div className="insideNav">
+        <div className="insideNav d-flex align-items-center justify-content-center">
         <img className="imgLogo" src={homeLogo} alt="" />
-        <h2>Certificate Verification System</h2>
+        <h2 className="oxanium px-1 my-3" >Certificate Verification System</h2>
       </div>
         </Navbar.Brand>
         <Navbar.Toggle
@@ -58,14 +84,14 @@ const AppNavbar = () => {
             <LinkContainer to="/Certificate-Verification-System/">
               <Nav.Link>Home</Nav.Link>
             </LinkContainer>
-            <LinkContainer to="/Certificate-Verification-System/login">
-              <Nav.Link>Login</Nav.Link>
+            <LinkContainer to="/Certificate-Verification-System/account">
+              <Nav.Link>Account</Nav.Link>
             </LinkContainer>
             <LinkContainer to="/Certificate-Verification-System/student">
               <Nav.Link>Dashboard</Nav.Link>
             </LinkContainer>
-            <LinkContainer to="/Certificate-Verification-System/search">
-              <Nav.Link>Search</Nav.Link>
+            <LinkContainer to="/Certificate-Verification-System/admin">
+              <Nav.Link>Admin</Nav.Link>
             </LinkContainer>
           </Nav>
         </Navbar.Collapse>
@@ -75,3 +101,5 @@ const AppNavbar = () => {
 };
 
 export default AppNavbar;
+
+

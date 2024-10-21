@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import { Container, Form, Button, Alert } from "react-bootstrap";
 import axios from "axios";
-import "./login.css"; // Import custom CSS
-
+import "./login.css";
 import { useNavigate } from "react-router-dom";
+import { Container, Form, Button, Alert } from "react-bootstrap";
 
 const Login = () => {
-  //const { handleLogin } = useOutletContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -21,18 +19,21 @@ const Login = () => {
         email,
         password,
       });
+
       localStorage.setItem("token", response.data.token);
       const userData = response.data.userData;
 
       if (response.status === 200) {
         setSuccess(true);
         setError(null);
-        // Redirect based on role
-        const role = response.data.role;
-        if (role === "Student") {
-          navigate("/student", { state: { userData } });
-        } else if (role === "Admin") {
+
+        localStorage.setItem("userData", JSON.stringify(userData));
+
+        // Determine redirection based on email
+        if (email.toLowerCase().includes("admin")) {
           navigate("/admin", { state: { userData } });
+        } else {
+          navigate("/student", { state: { userData } });
         }
       } else {
         setError("Login failed. Please check your credentials.");
@@ -46,12 +47,8 @@ const Login = () => {
   };
 
   return (
-    <div>
-     
-      <Container
-        className="mt-5 d-flex justify-content-center align-items-center"
-        style={{ minHeight: "80vh" }}
-      >
+    <div className="p-5">
+      <Container className=" d-flex align-items-center">
         <div className="login-form border p-4 rounded">
           <h2 className="text-center mb-4" style={{ color: "#364bc5" }}>
             Login
@@ -62,24 +59,26 @@ const Login = () => {
           {error && <Alert variant="danger">{error}</Alert>}
           <Form onSubmit={handleLogin}>
             <Form.Group controlId="formBasicEmail">
-              <Form.Label>Email address</Form.Label>
+              <Form.Label>Email address :</Form.Label>
               <Form.Control
                 type="email"
                 placeholder="Enter email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                required
               />
             </Form.Group>
-            <Form.Group controlId="formBasicPassword">
-              <Form.Label>Password</Form.Label>
+            <Form.Group controlId="formBasicPassword" className="mt-3">
+              <Form.Label>Password :</Form.Label>
               <Form.Control
                 type="password"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
               />
             </Form.Group>
-            <Button variant="primary" type="submit" className="w-100">
+            <Button variant="primary" type="submit" className="w-100 mt-4 btn-primary">
               Login
             </Button>
           </Form>

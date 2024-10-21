@@ -8,22 +8,15 @@ import Card from "./Card";
 const Student = () => {
   const [certificates, setCertificates] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 9;
-  const location = useLocation();
-  
-  const userData = location.state?.userData || {};
-  
-
-
-  // ----------- Input Filter -----------
   const [query, setQuery] = useState("");
-  const handleInputChange = (event) => {
-    setQuery(event.target.value);
-    setCurrentPage(1);
-  };
+  const itemsPerPage = 9;
 
-  useEffect(() => {
-    const apiCall = async () => {
+  const location = useLocation();
+  const userData = location.state?.userData || {};
+
+  // Function fetch certificates
+  const fetchCertificates = async () => {
+    try {
       const response = await axios.get(
         "http://localhost:5000/api/certificates",
         {
@@ -33,21 +26,30 @@ const Student = () => {
         }
       );
       const certiRef = response.data;
-      setCertificates(certiRef.filter((item) => {
-        return item.user === userData._id;
-      }))
-    };
+      setCertificates(certiRef.filter((item) => item.user === userData._id));
+    } catch (error) {
+      console.error("Failed to fetch certificates:", error);
+    }
+  };
 
-    apiCall();
+  // Fetch certificates on component mount
+  useEffect(() => {
+    fetchCertificates();
   }, []);
 
+  // ----------- Input Filter -----------
+  const handleInputChange = (event) => {
+    setQuery(event.target.value);
+    setCurrentPage(1);
+  };
+
   //------------filter by job title-----
-  const filteredItems = certificates.filter(
+  const filteredItems = certificates?.filter(
     (certificate) =>
-      certificate.name?.toLowerCase()?.indexOf(query.toLowerCase()) !== -1 ||
-      certificate.department?.toLowerCase()?.indexOf(query.toLowerCase()) !==
+      certificate.name?.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+      certificate.department?.toLowerCase().indexOf(query.toLowerCase()) !==
         -1 ||
-      certificate.id?.toLowerCase()?.indexOf(query.toLowerCase()) !== -1
+      certificate.id?.toLowerCase().indexOf(query.toLowerCase()) !== -1
   );
   // console.log(filteredItems);
 
@@ -76,42 +78,47 @@ const Student = () => {
   };
 
   return (
-    <div className="bg-slate-100 	">
-      <div className="">
-        <Banner query={query} handleInputChange={handleInputChange} />
-      </div>
+    <div className="flex flex-col h-screen bg-slate-100 ">
+    <div>
+    <Banner query={query} handleInputChange={handleInputChange} />
+  </div>
 
       {/* Certificate List */}
       {/* <CertificateList certificates={paginatedItems} /> */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 m-3">
-      {certificates.map((item) => (
-        <Card
-          key={item._id}
-          id = {item._id}
-          username={userData.name}
-          departmentName={item.department}
-          issueDate={item.date}
-        />
-      ))}
-    </div>
+      <div className=" flex-grow grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 m-3">
+        {paginatedItems.length > 0 ? (
+          paginatedItems.map((item) => (
+            <Card
+              key={item._id}
+              id={item._id}
+              username={userData?.name}
+              departmentName={item?.department}
+              issueDate={item?.date}
+            />
+          ))
+        ) : (
+          <div className="col-span-full text-center">
+            No certificates found for your search.
+          </div>
+        )}
+      </div>
+
       {/* Pagination Controls */}
       <div className="flex justify-center my-4">
         <button
           onClick={prevPage}
           disabled={currentPage === 1}
-          className=" px-4 py-2 bg-blue-500 text-white rounded mx-2"
+          className="px-4 py-2 bg-blue-500 text-white rounded mx-2"
         >
           Previous
         </button>
         <span className="px-4 py-2">
-          Page {currentPage} of {Math.ceil(filteredItems.length / itemsPerPage)}
+          Page {currentPage} of {Math.ceil(filteredItems.length / itemsPerPage) || '1'}
         </span>
         <button
           onClick={nextPage}
-          disabled={
-            currentPage === Math.ceil(filteredItems.length / itemsPerPage)
-          }
-          className=" px-4 py-2 bg-blue-500 text-white rounded mx-2"
+          disabled={currentPage === Math.ceil(filteredItems.length / itemsPerPage)}
+          className="px-4 py-2 bg-blue-500 text-white rounded mx-2"
         >
           Next
         </button>

@@ -4,14 +4,16 @@ import { Outlet, useNavigate } from "react-router-dom";
 import AppNavbar from "./components/Header/navbar";
 
 const App = () => {
-  const [loggedInAdminEmail, setLoggedInAdminEmail] = useState(null);
   const navigate = useNavigate();
 
-  const handleLogin = (email, role) => {
-    setLoggedInAdminEmail(email);
-    if (role === "Admin") {
+  const handleLogin = (email) => {
+  
+    // Check if the email belongs to an admin or a student
+    if (email.includes("admin")) {
+      // Redirect to admin dashboard
       navigate("/admin", { state: { email } });
     } else {
+      // Redirect to student dashboard
       navigate("/student", { state: { email } });
     }
   };

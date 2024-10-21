@@ -3,9 +3,12 @@ import Home from '../components/LandingPage/home'
 
 const LandingPage = () => {
   return (
-    <>
+    <div
+    style={{
+     }} 
+    >
      <Home/> 
-     </>
+     </div>
   )
 }
 
