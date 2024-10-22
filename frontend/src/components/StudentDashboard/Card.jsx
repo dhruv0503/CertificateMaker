@@ -18,7 +18,7 @@ const Card = ({ username, departmentName, issueDate, id }) => {
     );
 
     const downloadUrl = response.data.downloadUrl;
-    navigate(downloadUrl);
+    window.open(downloadUrl, "_blank");
   };
 
   return (

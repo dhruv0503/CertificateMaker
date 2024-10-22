@@ -1,6 +1,6 @@
 const User = require('../models/userModel');
 const Certificate = require("../models/certificateModel")
-const {PDFDocument, rgb} = require("pdf-lib")
+const { PDFDocument, rgb } = require("pdf-lib")
 const fs = require("fs");
 
 const s3 = require('../aws-config')
@@ -49,7 +49,9 @@ const uploadToAWS = async (file, key) => {
     const uploadParams = {
         Bucket: process.env.BUCKET_NAME,
         Key: key,
-        Body: file
+        Body: file,
+        ContentType: 'application/pdf',
+        ContentDisposition: 'inline',
     }
     const data = await s3.send(new PutObjectCommand(uploadParams));
     return data;
@@ -68,7 +70,7 @@ module.exports.uploadCertificates = async (data) => {
     let returnArray = [];
 
     //Traversing and creating new certificate
-    for(const ele of data){
+    for (const ele of data) {
         const existingPdfBytes = fs.readFileSync(process.env.CERTI_PATH);
         const pdfDoc = await PDFDocument.load(existingPdfBytes);
         const page = pdfDoc.getPages()[0];
@@ -86,7 +88,7 @@ module.exports.uploadCertificates = async (data) => {
             color: rgb(0, 0, 0)
         });
 
-        page.drawText(excelDateToJSDate( ele.Start_Date), {
+        page.drawText(excelDateToJSDate(ele.Start_Date), {
             x: 315,
             y: 245,
             size: 14,
@@ -100,21 +102,21 @@ module.exports.uploadCertificates = async (data) => {
             color: rgb(0, 0, 0)
         });
 
-        const newPdfBytes = await pdfDoc.save();  
-        
+        const newPdfBytes = await pdfDoc.save();
+
         //Creating AWS Key and Certificate Upload to DB
-        const user = await User.findOne({email : ele.Email});
+        const user = await User.findOne({ email: ele.Email });
         const userId = user._id;
         const uploadKey = `${userId}-${ele.Name}-${ele.Department}.pdf`
 
         await uploadToAWS(newPdfBytes, uploadKey)
 
         const newCertificateRef = new Certificate({
-            user : userId,
-            pdf : {
-                key : uploadKey
+            user: userId,
+            pdf: {
+                key: uploadKey
             },
-            department : ele.Department
+            department: ele.Department
         })
         const newCertificate = await newCertificateRef.save();
 

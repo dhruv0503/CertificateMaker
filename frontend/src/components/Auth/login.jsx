@@ -30,10 +30,10 @@ const Login = () => {
         localStorage.setItem("userData", JSON.stringify(userData));
 
         // Determine redirection based on email
-        if (email.toLowerCase().includes("admin")) {
-          navigate("/admin", { state: { userData } });
+        if (userData.role === 'Admin') {
+          navigate("/Certificate-Verification-System/admin", { state: { userData } });
         } else {
-          navigate("/student", { state: { userData } });
+          navigate("/Certificate-Verification-System/student", { state: { userData } });
         }
       } else {
         setError("Login failed. Please check your credentials.");

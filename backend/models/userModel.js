@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 const bcrypt = require('bcryptjs');
 
 const userSchema = new Schema({
-    name : {
+    name: {
         type: String,
         required: true,
     },
@@ -25,10 +25,10 @@ const userSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    certificates : {
-        type : Schema.Types.ObjectId,
-        ref : 'Certificate'
-    }
+    certificates: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Certificate'
+    }]
 });
 
 userSchema.pre('save', async function (next) {

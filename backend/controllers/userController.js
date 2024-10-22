@@ -34,7 +34,7 @@ module.exports.getUser = async (req, res, next) => {
 
 module.exports.profile = async(req, res, next) =>{
     const userId = req.user.id;
-    const user = await User.findById(userId);
+    const user = await User.findById(userId).populate("certificates");
     res.status(200).json({message: 'User found', user});
 }
 

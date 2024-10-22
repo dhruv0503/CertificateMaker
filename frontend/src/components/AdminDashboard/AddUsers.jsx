@@ -45,7 +45,7 @@ const AddUsers = () => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto mt-10">
+    <div className="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto mt-10" style={{zIndex : 999}}>
       <div >
         <h2 className="text-2xl font-bold mb-4 text-center">Add Multiple Users</h2>
         

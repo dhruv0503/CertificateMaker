@@ -18,7 +18,8 @@ const FilesCard = ({ username, departmentName, issueDate, id }) => {
     );
 
     const downloadUrl = response.data.downloadUrl;
-    navigate(downloadUrl);
+    console.log(downloadUrl);
+    window.open(downloadUrl, '_blank');
   };
 
   return (

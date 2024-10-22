@@ -22,20 +22,20 @@ app.use('/api', authRoutes)
 app.use('/api/users', userRoutes)
 app.use("/api/certificates", certificateRoutes)
 
-// app.all('*', (req, res, next) => {
-//     next(new expressError('Page Not Found', 404))
-// })
+app.all('*', (req, res, next) => {
+    next(new expressError('Page Not Found', 404))
+})
 
-// app.use((err, req, res, next) => {
-//     const { statusCode = 500 } = err;
-//     if (!err.message) err.message = 'Internal Server Error';
-//     res.status(statusCode).json({
-//         error: {
-//             message: err.message,
-//             status: err.statusCode
-//         }
-//     });
-// })
+app.use((err, req, res, next) => {
+    const { statusCode = 500 } = err;
+    if (!err.message) err.message = 'Internal Server Error';
+    res.status(statusCode).json({
+        error: {
+            message: err.message,
+            status: err.statusCode
+        }
+    });
+})
 
 app.listen(5000, () => {
     console.log('Server is running on port 5000');

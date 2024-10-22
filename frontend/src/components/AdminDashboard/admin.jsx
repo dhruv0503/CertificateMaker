@@ -163,7 +163,7 @@ const Admin = () => {
             <FilesCard
               key={item._id}
               id={item._id}
-              username={userData?.name}
+              username={item?.user?.name}
               departmentName={item?.department}
               issueDate={item?.date}
             />

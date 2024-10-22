@@ -28,7 +28,6 @@ const certificateSchema = new Schema({
 
 certificateSchema.methods.downloadUrlReset = function () {
     const doc = this;
-
     if (doc.pdf.downloadUrl) {
         setTimeout(async function () {
             doc.pdf.downloadUrl = undefined;

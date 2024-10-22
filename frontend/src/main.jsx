@@ -38,7 +38,7 @@ const LazyLoader = (
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route
-      path="/Certificate-Verification-System/"
+      path="/Certificate-Verification-System"
       element={
         <Suspense fallback={LazyLoader}>
           <App />
@@ -49,7 +49,7 @@ const router = createBrowserRouter(
      
       <Route path="account" element={<Newsletter />} />
       <Route 
-      path="student" 
+      path="/Certificate-Verification-System/student" 
       element={
         <Suspense fallback={LazyLoader}>
           <Studentdashboard />
@@ -57,7 +57,7 @@ const router = createBrowserRouter(
       } 
     />
     <Route 
-      path="admin" 
+      path="/Certificate-Verification-System/admin" 
       element={
         <Suspense fallback={LazyLoader}>
           <AdminDashboardPage />
