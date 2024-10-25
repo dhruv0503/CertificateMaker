@@ -31,7 +31,7 @@ const AppNavbar = () => {
 
   useEffect(() => {
     // Check if the user is authenticated
-    const loggedIn = localStorage.getItem("token") !== null;
+    const loggedIn = localStorage.getItem("token") === undefined ? false : true;
     setIsLoggedIn(loggedIn);
   }, []);
 
