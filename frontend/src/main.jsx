@@ -10,11 +10,12 @@ import App from "./App";
 import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-import LoginPage from "./pages/LoginPage";
+
  import Home from "./pages/LandingPage"; 
 import NotFound from "./components/NotFound";
 import Search from "./components/search";
 import Newsletter from "./components/Account/Account";
+import CustomLoader from "./utils/CustomLoader";
 
 // Lazy loading Student and Admin dashboard components
 const Studentdashboard = lazy(() => import("./pages/StudentDashboard"));
@@ -30,7 +31,7 @@ const LazyLoader = (
       height: "100vh",
     }}
   >
-    Loading .....
+  <CustomLoader/>
   </div>
 );
 

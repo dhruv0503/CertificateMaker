@@ -1,0 +1,57 @@
+.add-users-container {
+    background: linear-gradient(135deg, #e0f7e9 0%, #ffffff 100%);
+    border-radius: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    max-width: 32rem;
+    margin: 3rem auto;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .submit-button {
+    background: linear-gradient(90deg, #4caf50, #2e7d32);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .submit-button:hover {
+    background: linear-gradient(90deg, #2e7d32, #4caf50);
+  }
+  
+  .submit-button:active {
+    transform: scale(0.95);
+  }
+  
+  .user-card {
+    background-color: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  /* Responsive styling */
+  @media (max-width: 640px) {
+    .add-users-container {
+      padding: 1.5rem;
+    }
+  
+    .submit-button {
+      padding: 0.75rem;
+    }
+  }
+  

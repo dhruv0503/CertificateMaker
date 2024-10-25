@@ -7,7 +7,7 @@ const Studentdashboard = () => {
   const userData = location.state?.userData;
   return (
     <>
-       <h1 className="font-family:font-mono" > Welcome, {userData?.name || "Student"}</h1>
+     
       <Student />
     </>
   );

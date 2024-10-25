@@ -10,69 +10,56 @@ import CertificateUpload from "./CreateCertificate";
 
 const Admin = () => {
   const [files, setFiles] = useState([]);
-  const [uploadSuccess, setUploadSuccess] = useState(false);
   const [uploadError, setUploadError] = useState(null);
   const [query, setQuery] = useState("");
-  const [showAddUsers, setShowAddUsers] = useState(false); // adding new users
-
-  const navigate = useNavigate();
-  const location = useLocation();
-
+  const [showAddUsers, setShowAddUsers] = useState(false);
+  const [showCertificateUpload, setShowCertificateUpload] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
 
-  const userData = location.state?.userData || {};
-
-
-// upload new certificates
-  const [showCertificateUpload, setShowCertificateUpload] = useState(false);
-
-  const toggleCertificateUpload = () => {
-    setShowCertificateUpload(!showCertificateUpload);
-  };
-
-
+  const location = useLocation();
+  const userData = location.state?.userData;
 
   // Fetch certificates data
   useEffect(() => {
     const fetchCertificates = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:5000/api/certificates",
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-        const certiRef = response.data;
-        setFiles(certiRef);
+        const response = await axios.get("http://localhost:5000/api/certificates", {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        });
+        setFiles(response.data);
       } catch (error) {
         setUploadError("Failed to load certificates. Please try again.");
         console.error("Error fetching certificates:", error);
       }
     };
-
     fetchCertificates();
   }, []);
 
-  // ----------- Input Filter -----------
+  // const password = files[0].password;
+  // console.log(password);
+  
+
+  // Handle search input change
   const handleInputChange = (event) => {
     setQuery(event.target.value);
     setCurrentPage(1);
   };
 
-  //------------filter by job title-----
-  const filteredItems = files?.filter(
-    (certificate) =>
-      certificate.name?.toLowerCase()?.indexOf(query.toLowerCase()) !== -1 ||
-      certificate.department?.toLowerCase()?.indexOf(query.toLowerCase()) !==
-        -1 ||
-      certificate.id?.toLowerCase()?.indexOf(query.toLowerCase()) !== -1
+  // Sort certificates by latest issue date first
+  const sortedFiles = [...files].sort(
+    (a, b) => new Date(b.date) - new Date(a.date)
   );
-  // console.log(filteredItems);
 
-  // Function to calculate the index range for the current page
+  // Filter certificates based on query
+  const filteredItems = sortedFiles.filter(
+    (certificate) =>
+      certificate.name?.toLowerCase().includes(query.toLowerCase()) ||
+      certificate.department?.toLowerCase().includes(query.toLowerCase()) ||
+      certificate.id?.toLowerCase().includes(query.toLowerCase())
+  );
+
+  // Calculate pagination range
   const calculatePageRange = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -82,68 +69,71 @@ const Admin = () => {
   const { startIndex, endIndex } = calculatePageRange();
   const paginatedItems = filteredItems.slice(startIndex, endIndex);
 
-  // Function to handle next page
+  // Pagination controls
   const nextPage = () => {
     if (currentPage < Math.ceil(filteredItems.length / itemsPerPage)) {
       setCurrentPage(currentPage + 1);
     }
   };
 
-  // Function to handle previous page
   const prevPage = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
     }
   };
 
-  // Function to toggle the AddUsers component visibility
-  const toggleAddUsers = () => {
-    setShowAddUsers(!showAddUsers);
-  };
+  // Toggle visibility functions
+  const toggleAddUsers = () => setShowAddUsers(!showAddUsers);
+  const toggleCertificateUpload = () => setShowCertificateUpload(!showCertificateUpload);
 
   return (
-    <div className="h-screen flex flex-col bg-slate-100 ">
-      <div className="flex justify-content-between ">
-        {/* Upload new Certificate */}
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-100 to-gray-300">
+      <div className="flex justify-between items-center p-4">
+        {/* Upload Certificate Button */}
         <button
-        onClick={toggleCertificateUpload}
-        className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-      >
-        Upload Certificates
-      </button>
-      {showCertificateUpload && (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative">
-            <button
-              onClick={toggleCertificateUpload}
-              className="absolute top-2 right-1 bg-gray-100 text-gray-500 hover:text-gray-800 rounded-full px-2 pb-1"
-              style={{ fontSize: '30px' }}
-            >
-              &times;
-            </button>
-            <CertificateUpload />
+          onClick={toggleCertificateUpload}
+          className="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-2 px-4 rounded-lg shadow-md hover:shadow-xl transition-transform duration-300"
+        >
+          Upload Certificates
+        </button>
+
+        {showCertificateUpload && (
+          <div className="fixed inset-0  bg-opacity-30 backdrop-blur-sm flex justify-center items-center z-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative">
+              <button
+                onClick={toggleCertificateUpload}
+                className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
+                style={{ fontSize: "30px" }}
+              >
+                &times;
+              </button>
+              <CertificateUpload />
+            </div>
           </div>
-        </div>
-      )}
+        )}
+        
+        {/* Welcome Message */}
+        <h1 className="font-serif text-2xl font-bold bg-gradient-to-r from-indigo-500 to-blue-300 text-transparent bg-clip-text shadow-lg hover:shadow-2xl transition-all duration-300 p-2 rounded-lg">
+          Welcome, {userData?.name || "Admin"}
+        </h1>
 
-
-        {/* Add Users */}
+        {/* Add Users Button */}
         <button
           onClick={toggleAddUsers}
-          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+          className="bg-gradient-to-r from-green-500 to-teal-600 text-white py-2 px-4 rounded-lg shadow-md hover:shadow-xl transition-transform duration-300"
         >
           Add More Users
         </button>
 
         {showAddUsers && (
-          <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+          <div className="fixed inset-0  bg-opacity-30 backdrop-blur-smflex justify-center items-center z-50">
             <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative">
               <button
                 onClick={toggleAddUsers}
-                className="absolute top-2 right-1 bg-gray-100 text-gray-500 hover:text-gray-800 rounded-full px-2 pb-1"
-                style={{ fontSize: '30px' }}
+                className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
+                style={{ fontSize: "30px" }}
               >
-                &times; {/* Close button */}
+                &times;
               </button>
               <AddUsers />
             </div>
@@ -151,13 +141,10 @@ const Admin = () => {
         )}
       </div>
 
-      <div className="">
-        <Banner query={query} handleInputChange={handleInputChange} />
-      </div>
+      <Banner query={query} handleInputChange={handleInputChange} />
 
       {/* Certificate List */}
-      {/* <CertificateList certificates={paginatedItems} /> */}
-      <div className="flex-grow grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 m-3">
+      <div className="flex-grow grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
         {paginatedItems.length > 0 ? (
           paginatedItems.map((item) => (
             <FilesCard
@@ -166,33 +153,32 @@ const Admin = () => {
               username={item?.user?.name}
               departmentName={item?.department}
               issueDate={item?.date}
+              className="transform hover:scale-105 transition-transform duration-300 bg-white p-4 rounded-lg shadow-lg"
             />
           ))
         ) : (
-          <div className="col-span-full text-center">
+          <div className="col-span-full text-center text-gray-700">
             {uploadError || "No certificates found for your search."}
           </div>
         )}
       </div>
 
       {/* Pagination Controls */}
-      <div className="flex justify-center my-4">
+      <div className="flex justify-center items-center my-4">
         <button
           onClick={prevPage}
           disabled={currentPage === 1}
-          className="px-4 py-2 bg-blue-500 text-white rounded mx-2 hover:bg-blue-600"
+          className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg mx-2 disabled:opacity-50 shadow-md"
         >
           Previous
         </button>
-        <span className="px-4 py-2">
-          Page {currentPage} of {Math.ceil(filteredItems.length / itemsPerPage) || '1'}
+        <span className="px-4 py-2 text-gray-700">
+          Page {currentPage} of {Math.ceil(filteredItems.length / itemsPerPage) || "1"}
         </span>
         <button
           onClick={nextPage}
-          disabled={
-            currentPage === Math.ceil(filteredItems.length / itemsPerPage)
-          }
-          className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded mx-2"
+          disabled={currentPage === Math.ceil(filteredItems.length / itemsPerPage)}
+          className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg mx-2 disabled:opacity-50 shadow-md"
         >
           Next
         </button>
