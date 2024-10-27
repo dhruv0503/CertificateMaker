@@ -41,14 +41,13 @@ const Account = () => {
     }
   };
 
-  return (
-    <div className="flex items-center justify-center p-4 gap-4 bg-gradient-to-r from-blue-200 to-purple-300" style={{ minHeight: 'calc(100vh - 64px)' }}>
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-2xl border border-gray-200">
+    return (
+      <div className="flex flex-col items-center justify-center w-full max-w-md h-full p-8 space-y-6 bg-white rounded-lg shadow-2xl border border-gray-200">
         <h2 className="text-3xl font-semibold text-center text-gray-900">Account Settings</h2>
-
-        <div className="space-y-4">
+    
+        <div className="space-y-4 w-full">
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-700">Mail-id</label>
+            <label className="block mb-2 text-sm font-medium text-gray-700">Mail-Id</label>
             <input
               type="email"
               value={mailId}
@@ -56,11 +55,10 @@ const Account = () => {
               className="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-200 text-gray-700 cursor-not-allowed"
             />
           </div>
-
+    
           <form onSubmit={handleChangePassword} className="space-y-4">
             <div className="relative">
               <label className="block mb-2 text-sm font-medium text-gray-700">Old Password</label>
-             
               <input
                 type={showOldPassword ? 'text' : 'password'}
                 value={oldPassword}
@@ -75,7 +73,7 @@ const Account = () => {
                 {showOldPassword ? <MdVisibilityOff /> : <MdOutlineVisibility />}
               </span>
             </div>
-
+    
             {showNewPasswordField && (
               <div className="relative">
                 <label className="block mb-2 text-sm font-medium text-gray-700">Enter New Password</label>
@@ -95,21 +93,20 @@ const Account = () => {
               </div>
             )}
             <button
-            type="button"
-            onClick={() => {
-              if (!showNewPasswordField) {
-                setShowNewPasswordField(true);
-              } else {
-                handleChangePassword();
-              }
-            }}
-            className="w-full px-4 py-2 text-blue-500  rounded-md hover:text-blue-800 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          >
-            {showNewPasswordField ? 'Change Password' : ' Change Password ?'}
-          </button>
-         
+              type="button"
+              onClick={() => {
+                if (!showNewPasswordField) {
+                  setShowNewPasswordField(true);
+                } else {
+                  handleChangePassword();
+                }
+              }}
+              className="w-full px-4 py-2 text-blue-500 rounded-md hover:text-blue-800 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            >
+              {showNewPasswordField ? 'Change Password' : ' Change Password ?'}
+            </button>
           </form>
-
+    
           {/* Success or Error Alert Messages */}
           {message && (
             <div className="p-4 mt-4 text-green-800 bg-green-100 border border-green-300 rounded-md shadow-sm">
@@ -123,8 +120,9 @@ const Account = () => {
           )}
         </div>
       </div>
-    </div>
-  );
+    );
+    
+  
 };
 
 export default Account;
