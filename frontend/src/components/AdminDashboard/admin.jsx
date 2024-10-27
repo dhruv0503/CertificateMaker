@@ -24,9 +24,14 @@ const Admin = () => {
   useEffect(() => {
     const fetchCertificates = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/certificates", {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        });
+        const response = await axios.get(
+          "http://localhost:5000/api/certificates",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
         setFiles(response.data);
       } catch (error) {
         setUploadError("Failed to load certificates. Please try again.");
@@ -38,8 +43,15 @@ const Admin = () => {
 
   // const password = files[0].password;
   // console.log(password);
-  
 
+  function formatDate(isoString) {
+    const date = new Date(isoString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+    const year = date.getFullYear();
+
+    return `${day}-${month}-${year}`;
+  }
   // Handle search input change
   const handleInputChange = (event) => {
     setQuery(event.target.value);
@@ -84,7 +96,8 @@ const Admin = () => {
 
   // Toggle visibility functions
   const toggleAddUsers = () => setShowAddUsers(!showAddUsers);
-  const toggleCertificateUpload = () => setShowCertificateUpload(!showCertificateUpload);
+  const toggleCertificateUpload = () =>
+    setShowCertificateUpload(!showCertificateUpload);
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-100 to-gray-300">
@@ -111,7 +124,7 @@ const Admin = () => {
             </div>
           </div>
         )}
-        
+
         {/* Welcome Message */}
         <h1 className="font-serif text-2xl font-bold bg-gradient-to-r from-indigo-500 to-blue-300 text-transparent bg-clip-text shadow-lg hover:shadow-2xl transition-all duration-300 p-2 rounded-lg">
           Welcome, {userData?.name || "Admin"}
@@ -152,7 +165,7 @@ const Admin = () => {
               id={item._id}
               username={item?.user?.name}
               departmentName={item?.department}
-              issueDate={item?.date}
+              issueDate={formatDate(item?.date)}
               className="transform hover:scale-105 transition-transform duration-300 bg-white p-4 rounded-lg shadow-lg"
             />
           ))
@@ -173,11 +186,14 @@ const Admin = () => {
           Previous
         </button>
         <span className="px-4 py-2 text-gray-700">
-          Page {currentPage} of {Math.ceil(filteredItems.length / itemsPerPage) || "1"}
+          Page {currentPage} of{" "}
+          {Math.ceil(filteredItems.length / itemsPerPage) || "1"}
         </span>
         <button
           onClick={nextPage}
-          disabled={currentPage === Math.ceil(filteredItems.length / itemsPerPage)}
+          disabled={
+            currentPage === Math.ceil(filteredItems.length / itemsPerPage)
+          }
           className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg mx-2 disabled:opacity-50 shadow-md"
         >
           Next

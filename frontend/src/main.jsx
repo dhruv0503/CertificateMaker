@@ -10,8 +10,7 @@ import App from "./App";
 import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-
- import Home from "./pages/LandingPage"; 
+import Home from "./pages/LandingPage";
 import NotFound from "./components/NotFound";
 import Search from "./components/search";
 import Newsletter from "./components/Account/Account";
@@ -31,7 +30,7 @@ const LazyLoader = (
       height: "100vh",
     }}
   >
-  <CustomLoader/>
+    <CustomLoader />
   </div>
 );
 
@@ -46,25 +45,25 @@ const router = createBrowserRouter(
         </Suspense>
       }
     >
-      <Route index element={<Home />} /> 
-     
+      <Route index element={<Home />} />
+
       <Route path="account" element={<Newsletter />} />
-      <Route 
-      path="/Certificate-Verification-System/student" 
-      element={
-        <Suspense fallback={LazyLoader}>
-          <Studentdashboard />
-        </Suspense>
-      } 
-    />
-    <Route 
-      path="/Certificate-Verification-System/admin" 
-      element={
-        <Suspense fallback={LazyLoader}>
-          <AdminDashboardPage />
-        </Suspense>
-      } 
-    />
+      <Route
+        path="/Certificate-Verification-System/student"
+        element={
+          <Suspense fallback={LazyLoader}>
+            <Studentdashboard />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/Certificate-Verification-System/admin"
+        element={
+          <Suspense fallback={LazyLoader}>
+            <AdminDashboardPage />
+          </Suspense>
+        }
+      />
       <Route path="search" element={<Search />} />
       <Route path="*" element={<NotFound />} />
     </Route>

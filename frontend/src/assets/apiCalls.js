@@ -24,3 +24,11 @@
 // const response = await axios.post('http://localhost:5000/api/certificates/upload', file, {header bullshit again})
 
 //reload the page such that the api for all certificates gets called again.
+
+
+
+// when using addUser function, be sure to create a popup saying users added successfully and also say
+
+// Default password set to password jo bhi h
+
+// password you'll get from api as response.data.data[0].password
