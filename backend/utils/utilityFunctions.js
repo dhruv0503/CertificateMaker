@@ -36,7 +36,7 @@ module.exports.signUpMultipleUsers = async (data) => {
 
 module.exports.getDownloadUrl = async (key) => {
     const getFile = {
-        Bucket: process.env.BUCKET_NAME,
+        Bucket: process.env.MY_AWS_BUCKET_NAME,
         Key: key
     }
     const command = new GetObjectCommand(getFile);
@@ -46,7 +46,7 @@ module.exports.getDownloadUrl = async (key) => {
 
 const uploadToAWS = async (file, key) => {
     const uploadParams = {
-        Bucket: process.env.BUCKET_NAME,
+        Bucket: process.env.MY_AWS_BUCKET_NAME,
         Key: key,
         Body: file,
         ContentType: 'application/pdf',
@@ -86,7 +86,7 @@ const getTemplate = async () => {
     }
     try {
         const getObjectParams = {
-            Bucket: process.env.BUCKET_NAME,
+            Bucket: process.env.MY_AWS_BUCKET_NAME,
             Key: process.env.CERTI_PATH
         };
 

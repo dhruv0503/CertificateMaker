@@ -32,7 +32,6 @@ certificateSchema.methods.downloadUrlReset = function () {
         setTimeout(async function () {
             doc.pdf.downloadUrl = undefined;
             await doc.save(); 
-            console.log(`Download URL removed for certificate: ${doc._id}`);
         }, 60 * 60 * 1000); 
     }
 };
