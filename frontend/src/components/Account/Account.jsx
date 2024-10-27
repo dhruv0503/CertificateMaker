@@ -14,20 +14,19 @@ const Account = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    const storedEmail = localStorage.getItem('email');
-    if (storedEmail) {
-      setMailId(storedEmail);
-    }
-  }, []);
-
-  const handleChangePassword = async (e) => {
-    e.preventDefault();
+  const userDataString = localStorage.getItem('userData');
+  const userData = JSON.parse(userDataString);
+  const handleChangePassword = async () => {
     setMessage('');
     setError('');
 
     try {
-      const response = await axios.post( `${import.meta.env.VITE_API_URL}/api/changePassword`, { oldPassword, newPassword });
+      console.log({oldPassword, newPassword})
+      const response = await axios.post( `${import.meta.env.VITE_API_URL}/api/changePassword`, { oldPassword, newPassword }, {
+        headers : {
+          Authorization : `Bearer ${localStorage.getItem('token')}`
+        }
+      });
       if (response.data.success) {
         setMessage('Password changed successfully!');
         setOldPassword('');
@@ -50,7 +49,7 @@ const Account = () => {
             <label className="block mb-2 text-sm font-medium text-gray-700">Mail-Id</label>
             <input
               type="email"
-              value={mailId}
+              value={userData.email}
               disabled
               className="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-200 text-gray-700 cursor-not-allowed"
             />
@@ -74,7 +73,6 @@ const Account = () => {
               </span>
             </div>
     
-            {showNewPasswordField && (
               <div className="relative">
                 <label className="block mb-2 text-sm font-medium text-gray-700">Enter New Password</label>
                 <input
@@ -91,9 +89,9 @@ const Account = () => {
                   {showNewPassword ? <MdVisibilityOff /> : <MdOutlineVisibility />}
                 </span>
               </div>
-            )}
+            
             <button
-              type="button"
+              type= "submit"
               onClick={() => {
                 if (!showNewPasswordField) {
                   setShowNewPasswordField(true);

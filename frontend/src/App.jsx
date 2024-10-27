@@ -1,29 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import './App.css'
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import AppNavbar from "./components/Header/navbar";
+import { useLocation } from "react-router-dom";
 
 const App = () => {
-  const navigate = useNavigate();
+  const location = useLocation();
+  const [isNavbarVisible, setIsNavbarVisible] = useState(false);
 
-  const handleLogin = (email) => {
-  
-    // Check if the email belongs to an admin or a student
-    if (email.includes("admin")) {
-      // Redirect to admin dashboard
-      navigate("/admin", { state: { email } });
+  useEffect(() => {
+    if (location.pathname !== '/') {
+      setIsNavbarVisible(true);
     } else {
-      // Redirect to student dashboard
-      navigate("/student", { state: { email } });
+      setIsNavbarVisible(false);
     }
-  };
+  }, [location]);
 
   return (
     <>
-    <AppNavbar/>
-    <main>
-    <Outlet context={{ handleLogin }} />
-    </main>
+      {isNavbarVisible && <AppNavbar />}
+      <main>
+        <Outlet />
+      </main>
     </>
   );
 };

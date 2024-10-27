@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Navbar, Container, Nav } from "react-bootstrap";
-
 import "./navbar.css";
 import AccountModal from "../AccountModal";
 import homeLogo from "./imageLogo.png";
@@ -8,10 +7,8 @@ import { useNavigate } from "react-router-dom";
 import Account from "../Account/Account";
 
 const AppNavbar = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const navigate = useNavigate();
-
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -22,16 +19,13 @@ const AppNavbar = () => {
   };
 
   const handleLogout = () => {
-      localStorage.removeItem("token");
-      localStorage.removeItem("userData");
-      setIsLoggedIn(false);
-      navigate("/");
+    localStorage.removeItem("token");
+    localStorage.removeItem("userData");
+    navigate("/");
   };
 
-  useEffect(() => {
-    const loggedIn = localStorage.getItem("token") === undefined ? false : true;
-    setIsLoggedIn(loggedIn);
-  }, [isLoggedIn]);
+  // Assuming that login state can be determined by checking localStorage or similar.
+  const isLoggedIn = !!localStorage.getItem("token");
 
   return (
     <Navbar expand="lg" className="shadow-sm navbar-custom h-16">
@@ -49,10 +43,8 @@ const AppNavbar = () => {
           className="navbar-toggler-custom"
         />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav
-            className="flex justify-content-end"
-            style={{ width: "100%", justifyContent: "center" }}
-          >
+          <Nav className="flex justify-content-end" style={{ width: "100%", justifyContent: "center" }}>
+            {/* Only show buttons if the user is logged in */}
             {isLoggedIn && (
               <div className="d-flex align-items-center">
                 {/* Account Link */}
@@ -82,6 +74,4 @@ const AppNavbar = () => {
   );
 };
 
-
 export default AppNavbar;
-

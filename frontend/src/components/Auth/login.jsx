@@ -26,8 +26,8 @@ const Login = () => {
       if (response.status === 200) {
         setSuccess(true);
         setError(null);
-
-        localStorage.setItem("userData", JSON.stringify(userData));
+        const userDataString = JSON.stringify(userData)
+        localStorage.setItem("userData", userDataString);
 
         // Determine redirection based on email
         if (userData.role === 'Admin') {
