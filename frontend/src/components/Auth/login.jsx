@@ -31,9 +31,9 @@ const Login = () => {
 
         // Determine redirection based on email
         if (userData.role === 'Admin') {
-          navigate("/Certificate-Verification-System/admin", { state: { userData } });
+          navigate("/admin", { state: { userData } });
         } else {
-          navigate("/Certificate-Verification-System/student", { state: { userData } });
+          navigate("/student", { state: { userData } });
         }
       } else {
         setError("Login failed. Please check your credentials.");
