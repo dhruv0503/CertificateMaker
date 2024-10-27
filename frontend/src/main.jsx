@@ -12,7 +12,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import Home from "./pages/LandingPage";
 import NotFound from "./components/NotFound";
-import Search from "./components/search";
 import Newsletter from "./components/Account/Account";
 import CustomLoader from "./utils/CustomLoader";
 
@@ -64,7 +63,6 @@ const router = createBrowserRouter(
           </Suspense>
         }
       />
-      <Route path="search" element={<Search />} />
       <Route path="*" element={<NotFound />} />
     </Route>
   )
