@@ -12,7 +12,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import Home from "./pages/LandingPage";
 import NotFound from "./components/NotFound";
-import Newsletter from "./components/Account/Account";
 import CustomLoader from "./utils/CustomLoader";
 
 // Lazy loading Student and Admin dashboard components
@@ -45,8 +44,6 @@ const router = createBrowserRouter(
       }
     >
       <Route index element={<Home />} />
-
-      <Route path="account" element={<Newsletter />} />
       <Route
         path="/Certificate-Verification-System/student"
         element={

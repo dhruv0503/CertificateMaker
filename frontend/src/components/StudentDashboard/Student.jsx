@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Banner from "./Banner";
 import './student.css';
-import CertificateList from "./CertificateList";
 import axios from "axios";
 
 import { useLocation } from "react-router-dom";
