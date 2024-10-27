@@ -22,6 +22,10 @@ app.use('/api', authRoutes)
 app.use('/api/users', userRoutes)
 app.use("/api/certificates", certificateRoutes)
 
+app.get('/', (req, res) => {
+    res.send('Hello World!');
+});
+
 app.all('*', (req, res, next) => {
     next(new expressError('Page Not Found', 404))
 })
