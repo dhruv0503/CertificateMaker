@@ -139,7 +139,7 @@ const Admin = () => {
         </button>
 
         {showAddUsers && (
-          <div className="fixed inset-0  bg-opacity-30 backdrop-blur-smflex justify-center items-center z-50">
+          <div className="fixed inset-0  bg-opacity-30 backdrop-blur-sm flex justify-center items-center z-50">
             <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative">
               <button
                 onClick={toggleAddUsers}

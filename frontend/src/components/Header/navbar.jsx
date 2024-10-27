@@ -22,23 +22,21 @@ const AppNavbar = () => {
   };
 
   const handleLogout = () => {
-    if (window.confirm("Are you sure you want to log out?")) {
       localStorage.removeItem("token");
       localStorage.removeItem("userData");
+      setIsLoggedIn(false);
       navigate("/");
-    }
   };
 
   useEffect(() => {
-    // Check if the user is authenticated
     const loggedIn = localStorage.getItem("token") === undefined ? false : true;
     setIsLoggedIn(loggedIn);
-  }, []);
+  }, [isLoggedIn]);
 
   return (
     <Navbar expand="lg" className="shadow-sm navbar-custom h-16">
       <Container>
-        <Navbar.Brand href="/" className="brand-custom">
+        <Navbar.Brand className="brand-custom">
           <div className="insideNav d-flex align-items-center justify-content-center">
             <img className="imgLogo" src={homeLogo} alt="" />
             <h2 className="oxanium px-1 my-3 heading-custom">
@@ -71,7 +69,7 @@ const AppNavbar = () => {
                 {/* Logout Button */}
                 <button
                   onClick={handleLogout}
-                  className="logout-button px-4 py-2 mx-2 rounded-md transition-all duration-300"
+                  className="logout-button px-4 py-2 mx-2 rounded-md transition-all duration-300 mb-0"
                 >
                   Logout
                 </button>
