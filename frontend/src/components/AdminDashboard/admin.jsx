@@ -25,7 +25,7 @@ const Admin = () => {
     const fetchCertificates = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/certificates",
+          `${import.meta.env.VITE_API_URL}/api/certificates`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,

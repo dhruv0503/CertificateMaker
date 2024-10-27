@@ -10,7 +10,7 @@ const FilesCard = ({ username, departmentName, issueDate, id }) => {
 
   const handleSubmit = async () => {
     const response = await axios.get(
-      `http://localhost:5000/api/certificates/${id}`,
+      `${import.meta.env.VITE_API_URL}/api/certificates/${id}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,

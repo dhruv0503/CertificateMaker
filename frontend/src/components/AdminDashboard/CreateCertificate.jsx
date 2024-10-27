@@ -24,7 +24,7 @@ const CertificateUpload = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/certificates/upload",
+        `${import.meta.env.VITE_API_URL}/api/certificates/upload`,
         formData,
         {
           headers: {

@@ -27,7 +27,7 @@ const Account = () => {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:5000/api/changePassword', { oldPassword, newPassword });
+      const response = await axios.post( `${import.meta.env.VITE_API_URL}/api/changePassword`, { oldPassword, newPassword });
       if (response.data.success) {
         setMessage('Password changed successfully!');
         setOldPassword('');
