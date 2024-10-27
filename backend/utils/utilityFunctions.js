@@ -11,7 +11,7 @@ const { PutObjectCommand } = require('@aws-sdk/client-s3');
 const expressError = require('../utils/expressError')
 
 
-function generateRandomString(length) {
+const generateRandomString = (length) => {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
     for (let i = 0; i < length; i++) {
@@ -44,7 +44,6 @@ module.exports.getDownloadUrl = async (key) => {
     return fileUrl;
 }
 
-//send file.buffer from the function call
 const uploadToAWS = async (file, key) => {
     const uploadParams = {
         Bucket: process.env.BUCKET_NAME,
@@ -66,65 +65,109 @@ const excelDateToJSDate = (serial) => {
     return `${month}/${day}/${year}`;
 }
 
-module.exports.uploadCertificates = async (data) => {
-    let returnArray = [];
-
-    //Traversing and creating new certificate
-    for (const ele of data) {
-        const existingPdfBytes = fs.readFileSync(process.env.CERTI_PATH);
-        const pdfDoc = await PDFDocument.load(existingPdfBytes);
-        const page = pdfDoc.getPages()[0];
-        page.drawText(ele.Name, {
-            x: 325,
-            y: 325,
-            size: 32,
-            color: rgb(0, 0, 0)
-        });
-
-        page.drawText(ele.Department, {
-            x: 450,
-            y: 285,
-            size: 14,
-            color: rgb(0, 0, 0)
-        });
-
-        page.drawText(excelDateToJSDate(ele.Start_Date), {
-            x: 315,
-            y: 245,
-            size: 14,
-            color: rgb(0, 0, 0)
-        });
-
-        page.drawText(excelDateToJSDate(ele.End_Date), {
-            x: 535,
-            y: 245,
-            size: 14,
-            color: rgb(0, 0, 0)
-        });
-
-        const newPdfBytes = await pdfDoc.save();
-
-        //Creating AWS Key and Certificate Upload to DB
-        const user = await User.findOne({ email: ele.Email });
-        const userId = user._id;
-        const uploadKey = `${userId}-${ele.Name}-${ele.Department}.pdf`
-
-        await uploadToAWS(newPdfBytes, uploadKey)
-
-        const newCertificateRef = new Certificate({
-            user: userId,
-            pdf: {
-                key: uploadKey
-            },
-            department: ele.Department
-        })
-        const newCertificate = await newCertificateRef.save();
-
-        //Adding Certificate to User
-        user.certificates.push(newCertificate._id);
-        await user.save();
-
-        returnArray.push(newCertificate);
+const streamToBuffer = async (readableStream) => {
+    try {
+        const chunks = [];
+        for await (const chunk of readableStream) {
+            chunks.push(chunk);
+        }
+        return Buffer.concat(chunks);
+    } catch (error) {
+        console.error('Error converting stream to buffer:', error);
+        throw error;
     }
-    return returnArray;
+};
+
+let templatePdfBytes = null;
+
+const getTemplate = async () => {
+    if (templatePdfBytes) {
+        return templatePdfBytes;
+    }
+    try {
+        const getObjectParams = {
+            Bucket: process.env.BUCKET_NAME,
+            Key: process.env.CERTI_PATH
+        };
+
+        const command = new GetObjectCommand(getObjectParams);
+        const data = await s3.send(command);
+        const pdfBuffer = await streamToBuffer(data.Body);
+
+        templatePdfBytes = pdfBuffer;
+        return templatePdfBytes;
+    } catch (error) {
+        console.error('Error fetching PDF template:', error);
+        throw error;
+    }
+};
+
+module.exports.uploadCertificates = async (data) => {
+    try {
+        const templateBytes = await getTemplate();
+        let returnArray = [];
+        for (const ele of data) {
+            const pdfDoc = await PDFDocument.load(templateBytes);
+            const page = pdfDoc.getPages()[0];
+
+            page.drawText(ele.Name, {
+                x: 325,
+                y: 325,
+                size: 32,
+                color: rgb(0, 0, 0)
+            });
+
+            page.drawText(ele.Department, {
+                x: 450,
+                y: 285,
+                size: 14,
+                color: rgb(0, 0, 0)
+            });
+
+            page.drawText(excelDateToJSDate(ele.Start_Date), {
+                x: 315,
+                y: 245,
+                size: 14,
+                color: rgb(0, 0, 0)
+            });
+
+            page.drawText(excelDateToJSDate(ele.End_Date), {
+                x: 535,
+                y: 245,
+                size: 14,
+                color: rgb(0, 0, 0)
+            });
+
+            const newPdfBytes = await pdfDoc.save();
+
+            const user = await User.findOne({ email: ele.Email });
+            if (!user) {
+                throw new Error(`User not found for email: ${ele.Email}`);
+            }
+
+            const userId = user._id;
+            const uploadKey = `${userId}-${ele.Name}-${ele.Department}.pdf`;
+
+            await uploadToAWS(newPdfBytes, uploadKey);
+
+            const newCertificateRef = new Certificate({
+                user: userId,
+                pdf: {
+                    key: uploadKey
+                },
+                department: ele.Department
+            });
+            const newCertificate = await newCertificateRef.save();
+
+            user.certificates.push(newCertificate._id);
+            await user.save();
+
+            returnArray.push(newCertificate);
+        }
+
+        return returnArray;
+    } catch (error) {
+        console.error('Error in uploadCertificates:', error);
+        throw error;
+    }
 };

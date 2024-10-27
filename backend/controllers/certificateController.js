@@ -12,15 +12,6 @@ module.exports.getAllCertificates = async (req, res, next) => {
     }
 }
 
-// module.exports.getPendingCertificates = async (req, res, next) => {
-//     try {
-//         const certificates = await Certificate.find({ status: "pending" })
-//         res.status(200).json(certificates)
-//     } catch (error) {
-//         return nexty(new expressError(error.message, 500))
-//     }
-// }
-
 module.exports.postCertificates = async (req, res, next) => {
     if (!req.file) {
         return next(new expressError(400, 'Please upload a valid file'))
@@ -43,16 +34,3 @@ module.exports.getCertificate = async(req, res, next) => {
     await certificate.save();
     res.status(200).json({message: 'Certificate found', downloadUrl});
 }
-
-
-// module.exports.test = async (req, res, next) => {
-//     const workbook = xlsx.read(req.file.buffer, { type: 'buffer' });
-//     const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-//     const data = xlsx.utils.sheet_to_json(worksheet);
-//     data.forEach(async (ele) => {
-//         console.log(ele);
-//         console.log(excelDateToJSDate(ele.Start_Date));
-//         console.log(excelDateToJSDate(ele.End_Date));
-//     })
-//     res.send("Done")
-// }
